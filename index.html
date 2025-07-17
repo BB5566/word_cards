@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- 載入 Bootstrap 5 CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
+      integrity="sha512-8HLCdW6BeB7Xy8HnWIhF1WDiOB3NS2sPQW6fzVzkg7rYmiFU2ns4CQLFYwsfaoC4vGcs8HFvXzxS9Jo5w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      .box {
+        perspective: 1000px; /* 啟用 3D 視角 */
+        height: 250px; /* 卡片高度 */
+      }
+      .card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.6s ease-in-out; /* 平滑翻轉 */
+        transform-style: preserve-3d;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 立體陰影 */
+        border-radius: 20px; /* 小圓角 */
+        transform-origin: center center; /* 確保從中心點翻轉 */
+      }
+      .card-inner.flipped {
+        transform: rotateY(180deg);
+      }
+      .front,
+      .back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+        border: 1px solid #ccc;
+        border-radius: 20px;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        font-family: sans-serif;
+        box-sizing: border-box; /* 確保邊框不會影響尺寸 */
+        top: 0;
+        left: 0;
+      }
+      .front {
+        background-color: #ffffff; /* 正面白底 */
+      }
+      .back {
+        transform: rotateY(180deg);
+        background-size: cover; /* 覆蓋整個區域 */
+        background-position: center; /* 居中顯示 */
+        background-repeat: no-repeat; /* 不重複 */
+        color: white; /* 改為白色文字以增加對比度 */
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9), 1px 1px 2px rgba(0, 0, 0, 0.8); /* 增強文字陰影 */
+        background-color: rgba(0, 0, 0, 0.3); /* 添加半透明黑色背景 */
+      }
+      .word,
+      .meaning-zh {
+        font-size: 1.8em; /* 加大重點字體 */
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* 為正面文字也添加陰影 */
+      }
+      .row {
+        display: flex; /* 確保是 flex 容器 */
+        flex-wrap: wrap; /* 允許換行 */
+        justify-content: flex-start; /* 左對齊 */
+      }
+
+      /* 自定義 4x5 排列 */
+      .col-custom {
+        flex: 0 0 20%; /* 每個佔20%寬度，一行5個 */
+        max-width: 20%;
+        padding: 50px; /* 添加左右間距 */
+      }
+
+      @media (max-width: 768px) {
+        .col-custom {
+          flex: 0 0 50%; /* 小螢幕每行2個 */
+          max-width: 50%;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .col-custom {
+          flex: 0 0 100%; /* 極小螢幕每行1個 */
+          max-width: 100%;
+        }
+      }
+
+      .back p {
+        background-color: rgba(0, 0, 0, 0.6); /* 為文字添加半透明背景 */
+        padding: 8px 12px; /* 增加內邊距 */
+        border-radius: 8px; /* 圓角邊框 */
+        margin: 10px 0; /* 上下間距 */
+        font-weight: 600; /* 加粗字體 */
+        font-size: 1.1em; /* 稍微放大字體 */
+      }
+      
+      .back .meaning-zh {
+        background-color: rgba(0, 0, 0, 0.7); /* 重點文字更深的背景 */
+        font-size: 1.8em; /* 保持原有大小 */
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row my-row">
+        <!-- 卡片將在此動態生成 -->
+      </div>
+    </div>
+
+    <!-- 載入 Bootstrap 5 JS -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"
+      integrity="sha512-7Pi/olpl3qJ7Mc5QV3jduK3F1b9QZHxRx/Nrff9WUTnGp6Tn6jswxCeAZWkdJnoP3spA6fh/3+/A5CcmVH6dNw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <!-- 載入 jQuery -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script src="./data/data.js"></script>
+    <script>
+      $(document).ready(function () {
+        const myRow = $(".my-row");
+        const gridSize = 20; // 4x5 = 20 個
+        const limitedData = data.slice(0, gridSize); // 只取前 20 個
+
+        // 預設的背景圖片陣列
+        const backgroundImages = [
+          "img/no1.png", // no.1
+          "https://images.unsplash.com/photo-1439066615861-d1af74d74000?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 湖景
+          "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 森林
+          "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 海洋
+          "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 星空
+          "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 沙漠
+          "https://images.unsplash.com/photo-1418065460487-3956ef35221a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 雪山
+          "https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 城市
+          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 重複使用
+          "https://images.unsplash.com/photo-1447433819943-74a20887db59?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 花田
+          "https://images.unsplash.com/photo-1500829243541-74b677fecc30?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 田園
+          "https://images.unsplash.com/photo-1480497490787-505ec076689f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 瀑布
+          "https://images.unsplash.com/photo-1486022651794-3154a4eb8c2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 竹林
+          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 重複使用
+          "https://images.unsplash.com/photo-1414609245224-afa02bfb3fda?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 櫻花
+          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 重複使用
+          "https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 草原
+          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 重複使用
+          "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80", // 重複使用
+          "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"  // 重複使用
+        ];
+
+        limitedData.forEach(function (value, index) {
+          let tmpText = `
+                <div class="col-custom mt-3">
+                    <div class="box">
+                        <div class="card-inner">
+                            <div class="front">
+                                <p class="word-id">no: ${value.id}</p>
+                                <p class="word">${value.word}</p>
+                                <p class="ipa">${value.ipa || "N/A"}</p>
+                                <p class="example-en">Example: ${
+                                  value.example_en || "N/A"
+                                }</p>
+                            </div>
+                            <div class="back card-back-${index}">
+                                <p class="meaning-zh">意思: ${
+                                  value.meaning_zh || "N/A"
+                                }</p>
+                                <p class="example-zh">例句: ${
+                                  value.example_zh || "N/A"
+                                }</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+          myRow.append(tmpText);
+          
+          // 為每張卡片設置不同的背景圖片
+          $(`.card-back-${index}`).css('background-image', `url('${backgroundImages[index % backgroundImages.length]}')`);
+        });
+
+        // 綁定點擊事件：點擊卡片翻轉
+        $(".card-inner").on("click", function () {
+          $(this).toggleClass("flipped");
+        });
+      });
+    </script>
+  </body>
+</html>
