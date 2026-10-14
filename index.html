@@ -431,7 +431,7 @@
         <p class="app-subtitle mb-3">互動式單字記憶卡片・點擊或使用鍵盤快速複習</p>
         <div class="instruction-alert alert alert-secondary text-center mb-0 px-3 py-2" role="status">
           <span aria-hidden="true">💡</span>
-          <span>點擊卡片翻轉（支援鍵盤 <kbd>Tab</kbd> 與 <kbd>Enter</kbd> / <kbd>Space</kbd> 鍵操作）</span>
+          <span>點擊卡片翻轉<span class="d-none d-md-inline">（支援鍵盤 <kbd>Tab</kbd> 與 <kbd>Enter</kbd> / <kbd>Space</kbd> 鍵操作）</span></span>
         </div>
       </div>
     </header>
@@ -504,28 +504,24 @@
                             <div class="front">
                                 <div class="card-top-bar">
                                     <span class="word-id">No. ${value.id}</span>
-                                    <span class="flip-hint" aria-hidden="true">↻ 翻轉</span>
                                 </div>
                                 <div class="card-main-content">
                                     <h2 class="word" lang="en">${value.word}</h2>
                                     <p class="ipa" lang="en">${value.ipa || "N/A"}</p>
-                                    <div class="example-container">
-                                        <p class="example-en" lang="en">
-                                            <span class="field-label">Example: </span>${value.example_en || "N/A"}
-                                        </p>
-                                    </div>
                                 </div>
                             </div>
                             <div class="back card-back-${index}">
                                 <div class="card-top-bar">
                                     <span class="word-id word-id-back">No. ${value.id}</span>
-                                    <span class="flip-hint flip-hint-back" aria-hidden="true">↺ 翻回</span>
                                 </div>
                                 <div class="card-main-content">
                                     <p class="meaning-zh" lang="zh-Hant">
                                         <span class="field-label-back">意思: </span>${value.meaning_zh || "N/A"}
                                     </p>
                                     <div class="example-container example-container-back">
+                                        <p class="example-zh mb-1" lang="en">
+                                            <span class="field-label-back">Example: </span>${value.example_en || "N/A"}
+                                        </p>
                                         <p class="example-zh" lang="zh-Hant">
                                             <span class="field-label-back">例句: </span>${value.example_zh || "N/A"}
                                         </p>
