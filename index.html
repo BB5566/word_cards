@@ -188,8 +188,14 @@
       /* 3D 視角容器 */
       .box {
         perspective: 1000px; /* 啟用 3D 視角 */
-        height: 280px; /* 舒適卡片高度 */
+        height: 180px; /* 適合手機的卡片高度 */
         transition: transform var(--transition-base);
+      }
+
+      @media (min-width: 576px) {
+        .box {
+          height: 280px; /* 桌面端舒適卡片高度 */
+        }
       }
 
       @media (hover: hover) and (pointer: fine) {
@@ -249,7 +255,7 @@
         -webkit-backface-visibility: hidden;
         border: 1px solid var(--color-border);
         border-radius: var(--radius-lg);
-        padding: var(--space-4);
+        padding: var(--space-3);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -258,6 +264,13 @@
         box-sizing: border-box;
         word-break: break-word;
         overflow: hidden;
+      }
+
+      @media (min-width: 576px) {
+        .front,
+        .back {
+          padding: var(--space-4);
+        }
       }
 
       /* 卡片正面 */
@@ -428,7 +441,7 @@
     <header class="app-header py-4 text-center">
       <div class="container">
         <h1 class="app-title mb-2">單字翻轉卡</h1>
-        <p class="app-subtitle mb-3">互動式單字記憶卡片・點擊或使用鍵盤快速複習</p>
+        <p class="app-subtitle mb-3">互動式單字記憶卡片・<span class="d-none d-md-inline">點擊或使用鍵盤</span><span class="d-inline d-md-none">輕觸卡片</span>快速複習</p>
         <div class="instruction-alert alert alert-secondary text-center mb-0 px-3 py-2" role="status">
           <span aria-hidden="true">💡</span>
           <span>點擊卡片翻轉<span class="d-none d-md-inline">（支援鍵盤 <kbd>Tab</kbd> 與 <kbd>Enter</kbd> / <kbd>Space</kbd> 鍵操作）</span></span>
@@ -504,6 +517,7 @@
                             <div class="front">
                                 <div class="card-top-bar">
                                     <span class="word-id">No. ${value.id}</span>
+                                    <span class="flip-hint">↻ 點擊翻面</span>
                                 </div>
                                 <div class="card-main-content">
                                     <h2 class="word" lang="en">${value.word}</h2>
@@ -513,6 +527,7 @@
                             <div class="back card-back-${index}">
                                 <div class="card-top-bar">
                                     <span class="word-id word-id-back">No. ${value.id}</span>
+                                    <span class="flip-hint flip-hint-back">↻ 點擊翻回</span>
                                 </div>
                                 <div class="card-main-content">
                                     <p class="meaning-zh" lang="zh-Hant">
