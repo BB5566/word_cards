@@ -149,10 +149,10 @@
         margin-right: -8px;
       }
 
-      /* 響應式卡片排列：手機 (390px) 單欄、平板 2-3 欄、桌面 (1280px) 5 欄 (4x5) */
+      /* 響應式卡片排列：手機 (390px) 雙欄、平板 2-3 欄、桌面 (1280px) 5 欄 (4x5) */
       .col-custom {
-        flex: 0 0 100%;
-        max-width: 100%;
+        flex: 0 0 50%;
+        max-width: 50%;
         padding: var(--space-2);
         box-sizing: border-box;
       }
@@ -188,7 +188,7 @@
       /* 3D 視角容器 */
       .box {
         perspective: 1000px; /* 啟用 3D 視角 */
-        height: 180px; /* 適合手機的卡片高度 */
+        height: 140px; /* 適合手機的卡片高度 */
         transition: transform var(--transition-base);
       }
 
@@ -363,12 +363,8 @@
 
       .ipa {
         font-size: var(--font-size-sm);
-        color: var(--color-primary);
-        font-family: var(--font-mono);
+        color: var(--color-text-secondary);
         margin: 0 0 var(--space-3) 0;
-        background-color: var(--color-primary-subtle);
-        padding: 2px 8px;
-        border-radius: var(--radius-sm);
       }
 
       .meaning-zh {
@@ -517,7 +513,6 @@
                             <div class="front">
                                 <div class="card-top-bar">
                                     <span class="word-id">No. ${value.id}</span>
-                                    <span class="flip-hint">↻ 點擊翻面</span>
                                 </div>
                                 <div class="card-main-content">
                                     <h2 class="word" lang="en">${value.word}</h2>
@@ -527,7 +522,6 @@
                             <div class="back card-back-${index}">
                                 <div class="card-top-bar">
                                     <span class="word-id word-id-back">No. ${value.id}</span>
-                                    <span class="flip-hint flip-hint-back">↻ 點擊翻回</span>
                                 </div>
                                 <div class="card-main-content">
                                     <p class="meaning-zh" lang="zh-Hant">
