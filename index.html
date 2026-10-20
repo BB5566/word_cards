@@ -149,10 +149,10 @@
         margin-right: -8px;
       }
 
-      /* 響應式卡片排列：手機 (390px) 雙欄、平板 2-3 欄、桌面 (1280px) 5 欄 (4x5) */
+      /* 響應式卡片排列：手機 (390px) 單欄、平板 2-3 欄、桌面 (1280px) 5 欄 (4x5) */
       .col-custom {
-        flex: 0 0 50%;
-        max-width: 50%;
+        flex: 0 0 100%;
+        max-width: 100%;
         padding: var(--space-2);
         box-sizing: border-box;
       }
@@ -342,6 +342,36 @@
         color: var(--color-text-inverse-subtle);
       }
 
+      /* 發音按鈕 */
+      .speaker-btn {
+        position: absolute;
+        bottom: var(--space-3);
+        right: var(--space-3);
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: var(--font-size-lg);
+        background-color: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-full);
+        box-shadow: var(--shadow-sm);
+        cursor: pointer;
+        z-index: 10;
+        transition: transform var(--transition-base), box-shadow var(--transition-base);
+      }
+
+      .speaker-btn:hover, .speaker-btn:focus-visible {
+        transform: scale(1.1);
+        box-shadow: var(--shadow-card);
+        outline: none;
+      }
+
+      .speaker-btn:active {
+        transform: scale(0.95);
+      }
+
       /* 卡片主體內容區 */
       .card-main-content {
         display: flex;
@@ -513,17 +543,18 @@
                             <div class="front">
                                 <div class="card-top-bar">
                                     <span class="word-id">No. ${value.id}</span>
-                                    <span class="flip-hint">↻ 點擊翻轉</span>
+                                    <span class="flip-hint" aria-hidden="true" title="點擊翻轉">↻</span>
                                 </div>
                                 <div class="card-main-content">
-                                    <h2 class="word" lang="en">${value.word} <span style="font-size: var(--font-size-base); cursor: pointer;">🔊</span></h2>
+                                    <h2 class="word" lang="en">${value.word}</h2>
                                     <p class="ipa" lang="en">${value.ipa || "N/A"}</p>
                                 </div>
+                                <div class="speaker-btn" role="button" aria-label="發音" tabindex="0">🔊</div>
                             </div>
                             <div class="back card-back-${index}">
                                 <div class="card-top-bar">
                                     <span class="word-id word-id-back">No. ${value.id}</span>
-                                    <span class="flip-hint flip-hint-back">↻ 點擊翻轉</span>
+                                    <span class="flip-hint flip-hint-back" aria-hidden="true" title="點擊翻轉">↻</span>
                                 </div>
                                 <div class="card-main-content">
                                     <p class="meaning-zh" lang="zh-Hant">
@@ -561,16 +592,39 @@
           }
         }
 
+        // 綁定發音按鈕點擊事件，阻止冒泡以避免翻轉卡片
+        myRow.on("click", ".speaker-btn", function (e) {
+          e.stopPropagation();
+          // 在這裡處理發音邏輯 (例如呼叫 Web Speech API)
+          console.log("Speaker button clicked");
+        });
+
+        // 綁定發音按鈕鍵盤事件，阻止冒泡以避免翻轉卡片
+        myRow.on("keydown", ".speaker-btn", function (e) {
+          if (e.key === "Enter" || e.key === " " || e.keyCode === 13 || e.keyCode === 32) {
+            e.preventDefault();
+            e.stopPropagation();
+            // 在這裡處理發音邏輯
+            console.log("Speaker button activated via keyboard");
+          }
+        });
+
         // 綁定點擊事件：點擊卡片翻轉
-        myRow.on("click", ".card-inner", function () {
-          toggleCard($(this));
+        myRow.on("click", ".card-inner", function (e) {
+          // 如果點擊的目標不是發音按鈕或其子元素，則翻轉
+          if (!$(e.target).closest(".speaker-btn").length) {
+            toggleCard($(this));
+          }
         });
 
         // 綁定鍵盤事件：Enter 或 Space 鍵翻轉卡片
         myRow.on("keydown", ".card-inner", function (e) {
-          if (e.key === "Enter" || e.key === " " || e.keyCode === 13 || e.keyCode === 32) {
-            e.preventDefault(); // 防止按 Space 時頁面向下滾動
-            toggleCard($(this));
+          // 如果按鍵觸發點不是發音按鈕，則翻轉
+          if (!$(e.target).closest(".speaker-btn").length) {
+            if (e.key === "Enter" || e.key === " " || e.keyCode === 13 || e.keyCode === 32) {
+              e.preventDefault(); // 防止按 Space 時頁面向下滾動
+              toggleCard($(this));
+            }
           }
         });
       });
