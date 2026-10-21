@@ -330,31 +330,20 @@
         border-color: rgba(255, 255, 255, 0.28);
       }
 
-      .flip-hint {
-        font-size: var(--font-size-xs);
-        color: var(--color-text-muted);
-        display: inline-flex;
-        align-items: center;
-        gap: 2px;
-      }
-
-      .flip-hint-back {
-        color: var(--color-text-inverse-subtle);
-      }
-
       /* 發音按鈕 */
       .speaker-btn {
         position: absolute;
         bottom: var(--space-3);
         right: var(--space-3);
-        width: 44px;
-        height: 44px;
+        width: 48px;
+        height: 48px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: var(--font-size-lg);
-        background-color: var(--color-surface);
-        border: 1px solid var(--color-border);
+        background-color: #eff6ff;
+        border: 2px solid #bfdbfe;
+        color: #1d4ed8;
         border-radius: var(--radius-full);
         box-shadow: var(--shadow-sm);
         cursor: pointer;
@@ -392,8 +381,9 @@
       }
 
       .ipa {
-        font-size: var(--font-size-sm);
-        color: var(--color-text-secondary);
+        font-size: 1rem;
+        color: #4B5563;
+        font-weight: 500;
         margin: 0 0 var(--space-3) 0;
       }
 
@@ -543,7 +533,6 @@
                             <div class="front">
                                 <div class="card-top-bar">
                                     <span class="word-id">No. ${value.id}</span>
-                                    <span class="flip-hint" aria-hidden="true" title="點擊翻轉">↻</span>
                                 </div>
                                 <div class="card-main-content">
                                     <h2 class="word" lang="en">${value.word}</h2>
@@ -554,7 +543,6 @@
                             <div class="back card-back-${index}">
                                 <div class="card-top-bar">
                                     <span class="word-id word-id-back">No. ${value.id}</span>
-                                    <span class="flip-hint flip-hint-back" aria-hidden="true" title="點擊翻轉">↻</span>
                                 </div>
                                 <div class="card-main-content">
                                     <p class="meaning-zh" lang="zh-Hant">
@@ -592,11 +580,11 @@
           }
         }
 
-        // 綁定發音按鈕點擊事件，阻止冒泡以避免翻轉卡片
-        myRow.on("click", ".speaker-btn", function (e) {
+        // 綁定發音按鈕點擊與觸控事件，阻止冒泡以避免翻轉卡片
+        myRow.on("click touchend", ".speaker-btn", function (e) {
           e.stopPropagation();
           // 在這裡處理發音邏輯 (例如呼叫 Web Speech API)
-          console.log("Speaker button clicked");
+          console.log("Speaker button clicked/touched");
         });
 
         // 綁定發音按鈕鍵盤事件，阻止冒泡以避免翻轉卡片
