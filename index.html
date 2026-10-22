@@ -173,22 +173,22 @@
 
       @media (min-width: 992px) {
         .col-custom {
-          flex: 0 0 25%;
-          max-width: 25%;
+          flex: 0 0 33.333333%;
+          max-width: 33.333333%;
         }
       }
 
       @media (min-width: 1200px) {
         .col-custom {
-          flex: 0 0 20%;
-          max-width: 20%;
+          flex: 0 0 25%;
+          max-width: 25%;
         }
       }
 
       /* 3D 視角容器 */
       .box {
         perspective: 1000px; /* 啟用 3D 視角 */
-        height: 140px; /* 適合手機的卡片高度 */
+        height: 220px; /* 適合手機的卡片高度 */
         transition: transform var(--transition-base);
       }
 
@@ -332,15 +332,12 @@
 
       /* 發音按鈕 */
       .speaker-btn {
-        position: absolute;
-        bottom: var(--space-3);
-        right: var(--space-3);
-        width: 48px;
-        height: 48px;
+        width: 36px;
+        height: 36px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: var(--font-size-lg);
+        font-size: var(--font-size-base);
         background-color: #eff6ff;
         border: 2px solid #bfdbfe;
         color: #1d4ed8;
@@ -385,6 +382,15 @@
         color: #4B5563;
         font-weight: 500;
         margin: 0 0 var(--space-3) 0;
+      }
+
+      @media (min-width: 768px) {
+        .word {
+          font-size: 2.5rem;
+        }
+        .ipa {
+          font-size: 1.25rem;
+        }
       }
 
       .meaning-zh {
@@ -536,9 +542,12 @@
                                 </div>
                                 <div class="card-main-content">
                                     <h2 class="word" lang="en">${value.word}</h2>
-                                    <p class="ipa" lang="en">${value.ipa || "N/A"}</p>
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                        <p class="ipa mb-0" lang="en">${value.ipa || "N/A"}</p>
+                                        <div class="speaker-btn" role="button" aria-label="發音" tabindex="0">🔊</div>
+                                    </div>
                                 </div>
-                                <div class="speaker-btn" role="button" aria-label="發音" tabindex="0">🔊</div>
+                                <div class="position-absolute text-muted" aria-hidden="true" style="bottom: 12px; right: 12px; font-size: 1.2rem; pointer-events: none;">↻</div>
                             </div>
                             <div class="back card-back-${index}">
                                 <div class="card-top-bar">
@@ -582,7 +591,8 @@
 
         // 綁定發音按鈕點擊與觸控事件，阻止冒泡以避免翻轉卡片
         myRow.on("click touchend", ".speaker-btn", function (e) {
-          e.stopPropagation();
+          e.preventDefault();
+          e.stopImmediatePropagation();
           // 在這裡處理發音邏輯 (例如呼叫 Web Speech API)
           console.log("Speaker button clicked/touched");
         });
@@ -591,7 +601,7 @@
         myRow.on("keydown", ".speaker-btn", function (e) {
           if (e.key === "Enter" || e.key === " " || e.keyCode === 13 || e.keyCode === 32) {
             e.preventDefault();
-            e.stopPropagation();
+            e.stopImmediatePropagation();
             // 在這裡處理發音邏輯
             console.log("Speaker button activated via keyboard");
           }
