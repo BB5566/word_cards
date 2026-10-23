@@ -338,9 +338,9 @@
         align-items: center;
         justify-content: center;
         font-size: var(--font-size-lg);
-        background-color: #eff6ff;
-        border: 2px solid #bfdbfe;
-        color: #1d4ed8;
+        background-color: var(--color-primary-subtle);
+        border: 2px solid var(--color-primary-border);
+        color: var(--color-primary);
         border-radius: var(--radius-full);
         box-shadow: var(--shadow-sm);
         cursor: pointer;
@@ -375,6 +375,10 @@
         color: var(--color-text-primary);
         line-height: var(--line-height-tight);
         margin: 0 0 var(--space-1) 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
       }
 
       .ipa {
@@ -541,9 +545,9 @@
                                     <span class="word-id">No. ${value.id}</span>
                                 </div>
                                 <div class="card-main-content">
-                                    <div class="d-flex align-items-center justify-content-center gap-3 mb-1">
+                                    <div class="d-flex align-items-center justify-content-center gap-3 mb-1" style="flex-wrap: nowrap; max-width: 100%;">
                                         <h2 class="word mb-0" lang="en">${value.word}</h2>
-                                        <div class="speaker-btn" role="button" aria-label="發音" tabindex="0">🔊</div>
+                                        <div class="speaker-btn flex-shrink-0" role="button" aria-label="發音" tabindex="0">🔊</div>
                                     </div>
                                     <p class="ipa mb-0" lang="en">${value.ipa || "N/A"}</p>
                                 </div>
