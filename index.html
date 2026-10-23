@@ -188,7 +188,7 @@
       /* 3D 視角容器 */
       .box {
         perspective: 1000px; /* 啟用 3D 視角 */
-        height: 220px; /* 適合手機的卡片高度 */
+        height: 160px; /* 適合手機的卡片高度 */
         transition: transform var(--transition-base);
       }
 
@@ -255,7 +255,7 @@
         -webkit-backface-visibility: hidden;
         border: 1px solid var(--color-border);
         border-radius: var(--radius-lg);
-        padding: var(--space-3);
+        padding: var(--space-2);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -332,12 +332,12 @@
 
       /* 發音按鈕 */
       .speaker-btn {
-        width: 36px;
-        height: 36px;
+        width: 44px;
+        height: 44px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: var(--font-size-base);
+        font-size: var(--font-size-lg);
         background-color: #eff6ff;
         border: 2px solid #bfdbfe;
         color: #1d4ed8;
@@ -541,13 +541,12 @@
                                     <span class="word-id">No. ${value.id}</span>
                                 </div>
                                 <div class="card-main-content">
-                                    <h2 class="word" lang="en">${value.word}</h2>
-                                    <div class="d-flex align-items-center justify-content-center gap-2">
-                                        <p class="ipa mb-0" lang="en">${value.ipa || "N/A"}</p>
+                                    <div class="d-flex align-items-center justify-content-center gap-3 mb-1">
+                                        <h2 class="word mb-0" lang="en">${value.word}</h2>
                                         <div class="speaker-btn" role="button" aria-label="發音" tabindex="0">🔊</div>
                                     </div>
+                                    <p class="ipa mb-0" lang="en">${value.ipa || "N/A"}</p>
                                 </div>
-                                <div class="position-absolute text-muted" aria-hidden="true" style="bottom: 12px; right: 12px; font-size: 1.2rem; pointer-events: none;">↻</div>
                             </div>
                             <div class="back card-back-${index}">
                                 <div class="card-top-bar">
