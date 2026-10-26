@@ -189,7 +189,7 @@
       /* 3D 視角容器 */
       .box {
         perspective: 1000px; /* 啟用 3D 視角 */
-        height: 120px; /* 適合手機的卡片高度 */
+        height: 180px; /* 適合手機的卡片高度 */
         transition: transform var(--transition-base);
       }
 
@@ -339,19 +339,18 @@
         align-items: center;
         justify-content: center;
         font-size: var(--font-size-base);
-        background-color: #eff6ff;
-        border: 2px solid #bfdbfe;
-        color: #1d4ed8;
+        background-color: transparent;
+        border: none;
+        color: var(--color-primary);
         border-radius: var(--radius-full);
-        box-shadow: var(--shadow-sm);
         cursor: pointer;
         z-index: 10;
-        transition: transform var(--transition-base), box-shadow var(--transition-base);
+        transition: transform var(--transition-base), background-color var(--transition-base);
       }
 
       .speaker-btn:hover, .speaker-btn:focus-visible {
         transform: scale(1.1);
-        box-shadow: var(--shadow-card);
+        background-color: rgba(0, 0, 0, 0.05);
         outline: none;
       }
 
@@ -458,27 +457,6 @@
         }
       }
 
-      /* 翻轉提示 */
-      .flip-hint {
-        position: absolute;
-        bottom: var(--space-2);
-        right: var(--space-2);
-        color: var(--color-text-muted);
-        font-size: var(--font-size-lg);
-        opacity: 0.6;
-        pointer-events: none;
-      }
-
-      .flip-hint-back {
-        color: rgba(255, 255, 255, 0.6);
-      }
-
-      @media (min-width: 576px) {
-        .flip-hint {
-          bottom: var(--space-3);
-          right: var(--space-3);
-        }
-      }
     </style>
   </head>
 
@@ -568,7 +546,6 @@
                                     <h2 class="word mb-0" lang="en">${value.word}</h2>
                                     <p class="ipa mb-0" lang="en">${value.ipa || "N/A"}</p>
                                 </div>
-                                <div class="flip-hint" aria-hidden="true">⟲</div>
                             </div>
                             <div class="back card-back-${index}">
                                 <div class="card-top-bar">
@@ -587,7 +564,6 @@
                                         </p>
                                     </div>
                                 </div>
-                                <div class="flip-hint flip-hint-back" aria-hidden="true">⟲</div>
                             </div>
                         </div>
                     </div>
