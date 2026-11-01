@@ -592,7 +592,11 @@
           e.preventDefault();
           e.stopImmediatePropagation();
           // 在這裡處理發音邏輯 (例如呼叫 Web Speech API)
-          console.log("Speaker button clicked/touched");
+          const word = $(this).closest(".card-inner").find(".word").text();
+          const u = new SpeechSynthesisUtterance(word);
+          u.lang = 'en-US';
+          speechSynthesis.cancel();
+          speechSynthesis.speak(u);
         });
 
         // 綁定發音按鈕鍵盤事件，阻止冒泡以避免翻轉卡片
@@ -601,7 +605,11 @@
             e.preventDefault();
             e.stopImmediatePropagation();
             // 在這裡處理發音邏輯
-            console.log("Speaker button activated via keyboard");
+            const word = $(this).closest(".card-inner").find(".word").text();
+            const u = new SpeechSynthesisUtterance(word);
+            u.lang = 'en-US';
+            speechSynthesis.cancel();
+            speechSynthesis.speak(u);
           }
         });
 
