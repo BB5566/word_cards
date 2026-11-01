@@ -526,22 +526,13 @@
         const myRow = $(".my-row");
         const wordData = typeof data !== "undefined" ? data : [];
         // 預設的背景圖片陣列
-                const backgroundImages = [
+        const backgroundImages = [
           "img/no1.png", // no.1
-          "img/no2.png", // no.2
-          "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 森林
-          "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 海洋
-          "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 星空
-          "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 沙漠
-          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 雪山
-          "https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 城市
-          "https://images.unsplash.com/photo-1500829243541-74b677fecc30?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 田園
-          "https://images.unsplash.com/photo-1480497490787-505ec076689f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 瀑布
-          "https://images.unsplash.com/photo-1414609245224-afa02bfb3fda?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 櫻花
-          "https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"  // 草原
+          "img/no2.png"  // no.2
         ];
 
         wordData.forEach(function (value, index) {
+          const bgUrl = backgroundImages[index % backgroundImages.length];
           let tmpText = `
                 <div class="col-custom">
                     <div class="box">
@@ -555,7 +546,7 @@
                                     <p class="ipa mb-0" lang="en">${esc(value.ipa) || "N/A"}</p>
                                 </div>
                             </div>
-                            <div class="back card-back-${index}">
+                            <div class="back" data-bg-url="${bgUrl}">
                                 <div class="card-top-bar">
                                     <span class="word-id word-id-back">No. ${value.id}</span>
                                 </div>
@@ -579,9 +570,6 @@
                 </div>
                 `;
           myRow.append(tmpText);
-          
-          // 為每張卡片設置不同的背景圖片
-          $(`.card-back-${index}`).css('background-image', `url('${backgroundImages[index % backgroundImages.length]}')`);
         });
 
         // 翻轉卡片函式與無障礙狀態更新
@@ -590,6 +578,13 @@
           $card.attr("aria-pressed", isFlipped ? "true" : "false");
           const word = $card.find(".word").text();
           if (isFlipped) {
+            // 懶載入背景圖片
+            const $back = $card.find(".back");
+            if ($back.length && $back.data("bg-url") && !$back.data("bg-loaded")) {
+              $back.css("background-image", `url('${$back.data("bg-url")}')`);
+              $back.data("bg-loaded", true);
+            }
+
             const meaning = $card.data("meaning");
             const exEn = $card.data("example-en");
             const exZh = $card.data("example-zh");
