@@ -189,6 +189,7 @@
       /* 3D 視角容器 */
       .box {
         perspective: 1000px; /* 啟用 3D 視角 */
+        position: relative;
         height: 180px; /* 適合手機的卡片高度 */
         transition: transform var(--transition-base);
       }
@@ -224,6 +225,13 @@
         outline: none;
         user-select: none;
         -webkit-user-select: none;
+        /* Reset button styles */
+        border: none;
+        background: transparent;
+        padding: 0;
+        display: block;
+        text-align: left;
+        font: inherit;
       }
 
       .card-inner.flipped {
@@ -333,6 +341,9 @@
 
       /* 發音按鈕 */
       .speaker-btn {
+        position: absolute;
+        top: var(--space-3);
+        right: var(--space-3);
         width: 44px;
         height: 44px;
         display: flex;
@@ -534,11 +545,10 @@
           let tmpText = `
                 <div class="col-custom">
                     <div class="box">
-                        <div class="card-inner" role="button" tabindex="0" aria-pressed="false" aria-label="單字卡：${esc(value.word)}，點擊翻轉查看意思">
+                        <div class="card-inner" role="group" tabindex="0" aria-pressed="false" aria-label="單字卡：${esc(value.word)}，點擊翻轉查看意思" data-meaning="${esc(value.meaning_zh) || 'N/A'}" data-example-en="${esc(value.example_en) || 'N/A'}" data-example-zh="${esc(value.example_zh) || 'N/A'}">
                             <div class="front">
                                 <div class="card-top-bar">
                                     <span class="word-id">No. ${value.id}</span>
-                                    <div class="speaker-btn" role="button" aria-label="發音" tabindex="0">🔊</div>
                                 </div>
                                 <div class="card-main-content">
                                     <h2 class="word mb-0" lang="en">${esc(value.word)}</h2>
@@ -564,6 +574,7 @@
                                 </div>
                             </div>
                         </div>
+                        <button type="button" class="speaker-btn" aria-label="發音">🔊</button>
                     </div>
                 </div>
                 `;
@@ -579,7 +590,10 @@
           $card.attr("aria-pressed", isFlipped ? "true" : "false");
           const word = $card.find(".word").text();
           if (isFlipped) {
-            $card.attr("aria-label", `單字卡：${word}（已翻至背面），點擊翻回正面`);
+            const meaning = $card.data("meaning");
+            const exEn = $card.data("example-en");
+            const exZh = $card.data("example-zh");
+            $card.attr("aria-label", `單字卡：${word}（已翻至背面）。意思：${meaning}。例句：${exEn}。翻譯：${exZh}。點擊翻回正面`);
           } else {
             $card.attr("aria-label", `單字卡：${word}，點擊翻轉查看意思`);
           }
@@ -590,7 +604,7 @@
           e.preventDefault();
           e.stopImmediatePropagation();
           // 在這裡處理發音邏輯 (例如呼叫 Web Speech API)
-          const word = $(this).closest(".card-inner").find(".word").text();
+          const word = $(this).closest(".box").find(".word").text();
           const u = new SpeechSynthesisUtterance(word);
           u.lang = 'en-US';
           speechSynthesis.cancel();
@@ -603,7 +617,7 @@
             e.preventDefault();
             e.stopImmediatePropagation();
             // 在這裡處理發音邏輯
-            const word = $(this).closest(".card-inner").find(".word").text();
+            const word = $(this).closest(".box").find(".word").text();
             const u = new SpeechSynthesisUtterance(word);
             u.lang = 'en-US';
             speechSynthesis.cancel();
@@ -613,20 +627,14 @@
 
         // 綁定點擊事件：點擊卡片翻轉
         myRow.on("click", ".card-inner", function (e) {
-          // 如果點擊的目標不是發音按鈕或其子元素，則翻轉
-          if (!$(e.target).closest(".speaker-btn").length) {
-            toggleCard($(this));
-          }
+          toggleCard($(this));
         });
 
         // 綁定鍵盤事件：Enter 或 Space 鍵翻轉卡片
         myRow.on("keydown", ".card-inner", function (e) {
-          // 如果按鍵觸發點不是發音按鈕，則翻轉
-          if (!$(e.target).closest(".speaker-btn").length) {
-            if (e.key === "Enter" || e.key === " " || e.keyCode === 13 || e.keyCode === 32) {
-              e.preventDefault(); // 防止按 Space 時頁面向下滾動
-              toggleCard($(this));
-            }
+          if (e.key === "Enter" || e.key === " " || e.keyCode === 13 || e.keyCode === 32) {
+            e.preventDefault(); // 防止按 Space 時頁面向下滾動
+            toggleCard($(this));
           }
         });
       });
