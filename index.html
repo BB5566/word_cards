@@ -504,35 +504,24 @@
     <script>
       $(document).ready(function () {
         const myRow = $(".my-row");
-        const gridSize = 20; // 4x5 = 20 個
         const wordData = typeof data !== "undefined" ? data : [];
-        const limitedData = wordData.slice(0, gridSize); // 只取前 20 個
-
         // 預設的背景圖片陣列
-        const backgroundImages = [
+                const backgroundImages = [
           "img/no1.png", // no.1
           "img/no2.png", // no.2
           "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 森林
           "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 海洋
           "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 星空
           "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 沙漠
-          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 雪山 (已替換)
+          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 雪山
           "https://images.unsplash.com/photo-1509316785289-025f5b846b35?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 城市
-          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 重複使用
-          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 花田 (已替換)
           "https://images.unsplash.com/photo-1500829243541-74b677fecc30?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 田園
           "https://images.unsplash.com/photo-1480497490787-505ec076689f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 瀑布
-          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 竹林 (已替換)
-          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 重複使用
           "https://images.unsplash.com/photo-1414609245224-afa02bfb3fda?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 櫻花
-          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 重複使用
-          "https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 草原
-          "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 重複使用
-          "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", // 重複使用
-          "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"  // 重複使用
+          "https://images.unsplash.com/photo-1469474968028-56623f02e42e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"  // 草原
         ];
 
-        limitedData.forEach(function (value, index) {
+        wordData.forEach(function (value, index) {
           let tmpText = `
                 <div class="col-custom">
                     <div class="box">
