@@ -502,6 +502,15 @@
 
     <script src="./data/data.js"></script>
     <script>
+      function esc(str) {
+        if (!str) return str;
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#39;");
+      }
       $(document).ready(function () {
         const myRow = $(".my-row");
         const wordData = typeof data !== "undefined" ? data : [];
@@ -525,15 +534,15 @@
           let tmpText = `
                 <div class="col-custom">
                     <div class="box">
-                        <div class="card-inner" role="button" tabindex="0" aria-pressed="false" aria-label="單字卡：${value.word}，點擊翻轉查看意思">
+                        <div class="card-inner" role="button" tabindex="0" aria-pressed="false" aria-label="單字卡：${esc(value.word)}，點擊翻轉查看意思">
                             <div class="front">
                                 <div class="card-top-bar">
                                     <span class="word-id">No. ${value.id}</span>
                                     <div class="speaker-btn" role="button" aria-label="發音" tabindex="0">🔊</div>
                                 </div>
                                 <div class="card-main-content">
-                                    <h2 class="word mb-0" lang="en">${value.word}</h2>
-                                    <p class="ipa mb-0" lang="en">${value.ipa || "N/A"}</p>
+                                    <h2 class="word mb-0" lang="en">${esc(value.word)}</h2>
+                                    <p class="ipa mb-0" lang="en">${esc(value.ipa) || "N/A"}</p>
                                 </div>
                             </div>
                             <div class="back card-back-${index}">
@@ -542,14 +551,14 @@
                                 </div>
                                 <div class="card-main-content">
                                     <p class="meaning-zh" lang="zh-Hant">
-                                        <span class="field-label-back">意思: </span>${value.meaning_zh || "N/A"}
+                                        <span class="field-label-back">意思: </span>${esc(value.meaning_zh) || "N/A"}
                                     </p>
                                     <div class="example-container example-container-back">
                                         <p class="example-zh mb-1" lang="en">
-                                            <span class="field-label-back">Example: </span>${value.example_en || "N/A"}
+                                            <span class="field-label-back">Example: </span>${esc(value.example_en) || "N/A"}
                                         </p>
                                         <p class="example-zh" lang="zh-Hant">
-                                            <span class="field-label-back">例句: </span>${value.example_zh || "N/A"}
+                                            <span class="field-label-back">例句: </span>${esc(value.example_zh) || "N/A"}
                                         </p>
                                     </div>
                                 </div>
