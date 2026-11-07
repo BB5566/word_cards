@@ -190,7 +190,7 @@
       .box {
         perspective: 1000px; /* 啟用 3D 視角 */
         position: relative;
-        height: 130px; /* 適合手機的卡片高度，減少以在一屏顯示更多 */
+        height: 112px; /* 適合手機的卡片高度，減少以在一屏顯示更多 */
         transition: transform var(--transition-base);
       }
 
@@ -270,7 +270,7 @@
         -webkit-backface-visibility: hidden;
         border: 1px solid var(--color-border);
         border-radius: var(--radius-lg);
-        padding: var(--space-2);
+        padding: var(--space-1) var(--space-2);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -357,8 +357,8 @@
         justify-content: center;
         font-size: var(--font-size-base);
         background-color: var(--color-primary-subtle);
-        box-shadow: var(--shadow-sm);
-        border: none;
+        box-shadow: 0 2px 6px rgba(29, 78, 216, 0.2);
+        border: 1px solid var(--color-primary-border);
         color: var(--color-primary);
         border-radius: var(--radius-full);
         cursor: pointer;
@@ -463,19 +463,6 @@
         color: #ffffff;
       }
 
-      .flip-hint {
-        position: absolute;
-        bottom: var(--space-2);
-        right: var(--space-2);
-        opacity: 0.4;
-        font-size: 1.2rem;
-        color: var(--color-text-muted);
-        pointer-events: none;
-      }
-      .flip-hint-back {
-        color: var(--color-text-inverse-subtle);
-      }
-
       /* 減少動態效果 (無障礙) */
       @media (prefers-reduced-motion: reduce) {
         .card-inner {
@@ -566,7 +553,6 @@
                                     <h2 class="word mb-0" lang="en">${esc(value.word)}</h2>
                                     <p class="ipa mb-0" lang="en">${esc(value.ipa) || "N/A"}</p>
                                 </div>
-                                <div class="flip-hint">↻</div>
                             </div>
                             <div class="back" data-bg-url="${bgUrl}">
                                 <div class="card-top-bar">
@@ -585,7 +571,6 @@
                                         </p>
                                     </div>
                                 </div>
-                                <div class="flip-hint flip-hint-back">↻</div>
                             </div>
                         </div>
                         <button type="button" class="speaker-btn" aria-label="發音">🔊</button>
