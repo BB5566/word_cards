@@ -398,9 +398,55 @@
 
       .ipa {
         font-size: 1rem;
-        color: #4B5563;
+        color: var(--color-text-muted);
         font-weight: 500;
         margin: 0;
+      }
+
+      .word-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-2);
+      }
+
+      .pos-tag {
+        font-size: var(--font-size-xs);
+        font-weight: 700;
+        color: var(--color-primary);
+        background-color: var(--color-primary-subtle);
+        border: 1px solid var(--color-primary-border);
+        border-radius: var(--radius-full);
+        padding: 1px 7px;
+        line-height: var(--line-height-normal);
+      }
+
+      /* 卡片右下角的翻轉提示圖示 */
+      .flip-indicator {
+        position: absolute;
+        right: var(--space-2);
+        bottom: var(--space-2);
+        width: 26px;
+        height: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: var(--font-size-sm);
+        color: var(--color-text-muted);
+        background-color: var(--color-bg-body);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-full);
+        pointer-events: none;
+        transition: color var(--transition-base), background-color var(--transition-base), border-color var(--transition-base), transform var(--transition-base);
+      }
+
+      .box:hover .flip-indicator,
+      .card-inner:focus-visible .flip-indicator {
+        color: var(--color-primary);
+        background-color: var(--color-primary-subtle);
+        border-color: var(--color-primary-border);
+        transform: rotate(180deg);
       }
 
       @media (min-width: 768px) {
@@ -541,6 +587,9 @@
 
         wordData.forEach(function (value, index) {
           const bgUrl = backgroundImages[index % backgroundImages.length];
+          const posHtml = value.pos
+            ? `<span class="pos-tag">${esc(value.pos)}</span>`
+            : "";
           let tmpText = `
                 <div class="col-custom">
                     <div class="box">
@@ -550,9 +599,13 @@
                                     <span class="word-id">No. ${value.id}</span>
                                 </div>
                                 <div class="card-main-content">
-                                    <h2 class="word mb-0" lang="en">${esc(value.word)}</h2>
+                                    <div class="word-row">
+                                        <h2 class="word mb-0" lang="en">${esc(value.word)}</h2>
+                                        ${posHtml}
+                                    </div>
                                     <p class="ipa mb-0" lang="en">${esc(value.ipa) || "N/A"}</p>
                                 </div>
+                                <span class="flip-indicator" aria-hidden="true">↻</span>
                             </div>
                             <div class="back" data-bg-url="${bgUrl}">
                                 <div class="card-top-bar">
@@ -573,7 +626,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="speaker-btn" aria-label="發音">🔊</button>
+                        <button type="button" class="speaker-btn" aria-label="發音：${esc(value.word)}" title="點擊聽發音（不會翻轉卡片）">🔊</button>
                     </div>
                 </div>
                 `;
@@ -605,6 +658,7 @@
         // 綁定發音按鈕點擊與觸控事件，阻止冒泡以避免翻轉卡片
         myRow.on("click touchend", ".speaker-btn", function (e) {
           e.preventDefault();
+          e.stopPropagation();
           e.stopImmediatePropagation();
           // 在這裡處理發音邏輯 (例如呼叫 Web Speech API)
           const word = $(this).closest(".box").find(".word").text();
