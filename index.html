@@ -190,8 +190,8 @@
       .box {
         perspective: 1000px; /* 啟用 3D 視角 */
         position: relative;
-        height: 136px; /* 手機版保留足夠高度，避免內容過於擁擠 */
-        min-height: 136px;
+        height: 128px; /* 手機版微調高度，降低垂直空間浪費 */
+        min-height: 128px;
         transition: transform var(--transition-base);
       }
 
@@ -271,7 +271,7 @@
         -webkit-backface-visibility: hidden;
         border: 1px solid var(--color-border);
         border-radius: var(--radius-lg);
-        padding: var(--space-2) var(--space-3);
+        padding: var(--space-1) var(--space-3);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -346,32 +346,41 @@
         border-color: rgba(255, 255, 255, 0.28);
       }
 
-      /* 發音按鈕 */
+      /* 發音按鈕：極簡圖示，降低重複出現的視覺干擾 */
       .speaker-btn {
         position: absolute;
-        top: var(--space-3);
-        right: var(--space-3);
+        top: var(--space-2);
+        right: var(--space-2);
         width: 44px;
         height: 44px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: var(--font-size-base);
-        background-color: var(--color-primary-subtle);
-        box-shadow: 0 2px 6px rgba(29, 78, 216, 0.2);
-        border: 1px solid var(--color-primary-border);
-        color: var(--color-primary);
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+        color: var(--color-text-muted);
         border-radius: var(--radius-full);
         cursor: pointer;
         z-index: 10;
-        transition: transform var(--transition-base), background-color var(--transition-base), box-shadow var(--transition-base);
+        transition: transform var(--transition-base), color var(--transition-base), background-color var(--transition-base);
       }
 
-      .speaker-btn:hover, .speaker-btn:focus-visible {
-        transform: scale(1.1);
-        background-color: var(--color-primary-border);
-        box-shadow: var(--shadow-card);
-        outline: none;
+      .speaker-btn svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      .speaker-btn:hover {
+        color: var(--color-primary);
+        background-color: var(--color-primary-subtle);
+      }
+
+      .speaker-btn:focus-visible {
+        color: var(--color-primary);
+        background-color: var(--color-primary-subtle);
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
       }
 
       .speaker-btn:active {
@@ -404,23 +413,24 @@
         margin: 0;
       }
 
-      .word-row {
+      .word-meta {
         display: flex;
         flex-wrap: wrap;
-        align-items: baseline;
+        align-items: center;
         justify-content: center;
-        gap: var(--space-3);
+        gap: var(--space-2);
+        margin-top: var(--space-1);
       }
 
       .pos-tag {
-        align-self: baseline;
-        font-size: var(--font-size-xs);
+        display: inline-block;
+        font-size: var(--font-size-sm);
         font-weight: 700;
-        color: var(--color-primary);
-        background-color: var(--color-primary-subtle);
-        border: 1px solid var(--color-primary-border);
+        color: var(--color-text-inverse);
+        background-color: var(--color-primary);
+        border: 1px solid var(--color-primary);
         border-radius: var(--radius-full);
-        padding: 1px 8px;
+        padding: 2px 10px;
         line-height: var(--line-height-tight);
         white-space: nowrap;
       }
@@ -575,11 +585,11 @@
                                     <span class="word-id">No. ${value.id}</span>
                                 </div>
                                 <div class="card-main-content">
-                                    <div class="word-row">
-                                        <h2 class="word mb-0" lang="en">${esc(value.word)}</h2>
+                                    <h2 class="word mb-0" lang="en">${esc(value.word)}</h2>
+                                    <div class="word-meta">
                                         ${posHtml}
+                                        <p class="ipa mb-0" lang="en">${esc(value.ipa) || "N/A"}</p>
                                     </div>
-                                    <p class="ipa mb-0" lang="en">${esc(value.ipa) || "N/A"}</p>
                                 </div>
                             </div>
                             <div class="back" data-bg-url="${bgUrl}">
@@ -601,7 +611,13 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="speaker-btn" aria-label="發音：${esc(value.word)}" title="點擊聽發音（不會翻轉卡片）">🔊</button>
+                        <button type="button" class="speaker-btn" aria-label="發音：${esc(value.word)}" title="點擊聽發音（不會翻轉卡片）">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                <path d="M11 5 6 9H2v6h4l5 4z"></path>
+                                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                            </svg>
+                        </button>
                     </div>
                 </div>
                 `;
