@@ -149,14 +149,7 @@
         margin-right: -8px;
       }
 
-      /* 響應式卡片排列：手機 (390px) 單欄、平板 2-3 欄、桌面 (1280px) 5 欄 (4x5) */
-      @media (max-width: 575.98px) {
-        main.container {
-          padding-top: var(--space-3);
-          padding-bottom: var(--space-3);
-        }
-      }
-
+      /* 響應式卡片排列：手機 (390px) 2 欄、平板 2-3 欄、桌面 (1280px) 4-5 欄 */
       .col-custom {
         flex: 0 0 100%;
         max-width: 100%;
@@ -197,7 +190,7 @@
       .box {
         perspective: 1000px; /* 啟用 3D 視角 */
         position: relative;
-        height: 144px; /* 手機版略增高度，搭配加大內距讓文字更易讀 */
+        height: 144px; /* 手機版高度由下方 media query 覆寫 */
         min-height: 144px;
         transition: transform var(--transition-base);
       }
@@ -346,7 +339,7 @@
         border-color: rgba(255, 255, 255, 0.28);
       }
 
-      /* 發音按鈕：淺色圓形背景，明確區隔翻轉卡片與播放發音 */
+      /* 發音按鈕：實心圓形背景與外框，明確區隔翻轉卡片與播放發音 */
       .speaker-btn {
         position: absolute;
         top: var(--space-2);
@@ -356,10 +349,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: var(--color-bg-body);
-        border: 1px solid var(--color-border);
-        box-shadow: var(--shadow-sm);
-        color: var(--color-text-secondary);
+        background-color: var(--color-primary);
+        border: 2px solid var(--color-surface);
+        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25);
+        color: var(--color-text-inverse);
         border-radius: var(--radius-full);
         cursor: pointer;
         z-index: 10;
@@ -372,13 +365,13 @@
       }
 
       .speaker-btn:hover {
-        color: var(--color-primary);
-        background-color: var(--color-primary-subtle);
+        color: var(--color-text-inverse);
+        background-color: var(--color-primary-hover);
       }
 
       .speaker-btn:focus-visible {
-        color: var(--color-primary);
-        background-color: var(--color-primary-subtle);
+        color: var(--color-text-inverse);
+        background-color: var(--color-primary-hover);
         outline: 2px solid var(--color-primary);
         outline-offset: 2px;
       }
@@ -418,6 +411,7 @@
         flex-wrap: wrap;
         align-items: center;
         justify-content: center;
+        width: 100%;
         gap: var(--space-2);
         margin-top: var(--space-1);
       }
@@ -425,10 +419,10 @@
       .pos-tag {
         display: inline-block;
         font-size: var(--font-size-sm);
-        font-weight: 700;
-        color: var(--color-text-inverse);
-        background-color: var(--color-primary);
-        border: 1px solid var(--color-primary);
+        font-weight: 600;
+        color: var(--color-primary);
+        background-color: var(--color-primary-subtle);
+        border: 1px solid var(--color-primary-border);
         border-radius: var(--radius-full);
         padding: 2px 10px;
         line-height: var(--line-height-tight);
@@ -493,6 +487,47 @@
       .field-label-back {
         font-weight: 600;
         color: #ffffff;
+      }
+
+      /* 手機版改為 2 欄，並針對較窄卡片調整字級與內距 */
+      @media (max-width: 575.98px) {
+        main.container {
+          padding-top: var(--space-3);
+          padding-bottom: var(--space-3);
+        }
+        .col-custom {
+          flex: 0 0 50%;
+          max-width: 50%;
+          padding: var(--space-1);
+        }
+        .box {
+          height: 240px; /* 維持直式字卡比例，並容納背面例句 */
+          min-height: 240px;
+        }
+        .front,
+        .back {
+          padding: var(--space-2);
+        }
+        .word {
+          font-size: 1.35rem;
+        }
+        .ipa {
+          font-size: 0.8rem;
+        }
+        .word-meta {
+          gap: var(--space-1);
+        }
+        .meaning-zh {
+          font-size: 1.05rem;
+          margin-bottom: var(--space-1);
+        }
+        .example-container {
+          padding: var(--space-1) var(--space-2);
+        }
+        .example-en,
+        .example-zh {
+          font-size: var(--font-size-xs);
+        }
       }
 
       /* 減少動態效果 (無障礙) */
