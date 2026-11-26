@@ -149,7 +149,7 @@
         margin-right: -8px;
       }
 
-      /* 響應式卡片排列：手機 (390px) 2 欄、平板 2-3 欄、桌面 (1280px) 4-5 欄 */
+      /* 響應式卡片排列：手機 (<640px) 單欄、平板 2-3 欄、桌面 (1280px) 4-5 欄 */
       .col-custom {
         flex: 0 0 100%;
         max-width: 100%;
@@ -157,7 +157,7 @@
         box-sizing: border-box;
       }
 
-      @media (min-width: 576px) {
+      @media (min-width: 640px) {
         .col-custom {
           flex: 0 0 50%;
           max-width: 50%;
@@ -195,7 +195,7 @@
         transition: transform var(--transition-base);
       }
 
-      @media (min-width: 576px) {
+      @media (min-width: 640px) {
         .box {
           height: 280px; /* 桌面端舒適卡片高度 */
         }
@@ -339,7 +339,7 @@
         border-color: rgba(255, 255, 255, 0.28);
       }
 
-      /* 發音按鈕：實心圓形背景與外框，明確區隔翻轉卡片與播放發音 */
+      /* 發音按鈕：無背景線條圖示，降低視覺重量並保留 44px 觸控範圍 */
       .speaker-btn {
         position: absolute;
         top: var(--space-2);
@@ -349,10 +349,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: var(--color-primary);
-        border: 2px solid var(--color-surface);
-        box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25);
-        color: var(--color-text-inverse);
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+        color: var(--color-text-muted);
         border-radius: var(--radius-full);
         cursor: pointer;
         z-index: 10;
@@ -365,19 +365,46 @@
       }
 
       .speaker-btn:hover {
-        color: var(--color-text-inverse);
-        background-color: var(--color-primary-hover);
+        color: var(--color-primary);
+        background-color: rgba(29, 78, 216, 0.08);
       }
 
       .speaker-btn:focus-visible {
-        color: var(--color-text-inverse);
-        background-color: var(--color-primary-hover);
+        color: var(--color-primary);
+        background-color: rgba(29, 78, 216, 0.08);
         outline: 2px solid var(--color-primary);
         outline-offset: 2px;
       }
 
       .speaker-btn:active {
         transform: scale(0.95);
+      }
+
+      /* 翻至背面（深色背景）時改用淺色圖示以維持對比 */
+      .card-inner.flipped ~ .speaker-btn {
+        color: rgba(255, 255, 255, 0.85);
+      }
+
+      .card-inner.flipped ~ .speaker-btn:hover,
+      .card-inner.flipped ~ .speaker-btn:focus-visible {
+        color: var(--color-text-inverse);
+        background-color: rgba(255, 255, 255, 0.16);
+      }
+
+      /* 卡片右下角的翻轉提示圖示 */
+      .flip-hint {
+        position: absolute;
+        right: var(--space-2);
+        bottom: var(--space-2);
+        font-size: var(--font-size-sm);
+        line-height: 1;
+        color: var(--color-text-muted);
+        opacity: 0.6;
+        pointer-events: none;
+      }
+
+      .flip-hint-back {
+        color: rgba(255, 255, 255, 0.7);
       }
 
       /* 卡片主體內容區 */
@@ -489,20 +516,20 @@
         color: #ffffff;
       }
 
-      /* 手機版改為 2 欄，並針對較窄卡片調整字級與內距 */
-      @media (max-width: 575.98px) {
+      /* 手機版改為單欄，擴大橫向閱讀空間與點擊區域 */
+      @media (max-width: 639.98px) {
         main.container {
           padding-top: var(--space-3);
           padding-bottom: var(--space-3);
         }
         .col-custom {
-          flex: 0 0 50%;
-          max-width: 50%;
-          padding: var(--space-1);
+          flex: 0 0 100%;
+          max-width: 100%;
+          padding: var(--space-1) var(--space-2);
         }
         .box {
-          height: 240px; /* 維持直式字卡比例，並容納背面例句 */
-          min-height: 240px;
+          height: 220px; /* 單欄版面可容納背面例句，同時減少多餘留白 */
+          min-height: 220px;
         }
         .front,
         .back {
@@ -626,6 +653,7 @@
                                         <p class="ipa mb-0" lang="en">${esc(value.ipa) || "N/A"}</p>
                                     </div>
                                 </div>
+                                <span class="flip-hint" aria-hidden="true">↻</span>
                             </div>
                             <div class="back" data-bg-url="${bgUrl}">
                                 <div class="card-top-bar">
@@ -644,6 +672,7 @@
                                         </p>
                                     </div>
                                 </div>
+                                <span class="flip-hint flip-hint-back" aria-hidden="true">↻</span>
                             </div>
                         </div>
                         <button type="button" class="speaker-btn" aria-label="發音：${esc(value.word)}" title="點擊聽發音（不會翻轉卡片）">
